@@ -1,0 +1,64 @@
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#gameContainer {
+    text-align: center;
+    position: relative;
+}
+
+#gameCanvas {
+    border: 4px solid #fff;
+    display: none;
+}
+
+#menu, #pauseMenu {
+    font-size: 24px;
+}
+
+button {
+    background-color: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 10px 20px;
+    font-size: 18px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+#pauseMenu {
+    display: none;
+}
+
+#scoreboard {
+    position: absolute;
+    left: -200px;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: left;
+    font-size: 18px;
+}
+
+#winnerPopup {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border: 2px solid #fff;
+    z-index: 10;
+}
