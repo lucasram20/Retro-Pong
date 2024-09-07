@@ -20,6 +20,11 @@ let paddle2Y = canvas.height / 2 - 50;
 const paddleHeight = 100;
 const paddleWidth = 10;
 const paddleSpeed = 8;
+let paddle1Speed = 0;
+let paddle2Speed = 0;
+const paddleAcceleration = 0.5;
+const paddleDeceleration = 0.8;
+const maxPaddleSpeed = 8;
 
 let player1Score = 0;
 let player2Score = 0;
@@ -38,26 +43,26 @@ const winnerText = document.getElementById('winnerText');
 const newGameBtn = document.getElementById('newGameBtn');
 
 function drawRect(x, y, width, height) {
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#00ffff';
     ctx.fillRect(x, y, width, height);
 }
 
 function drawCircle(x, y, radius) {
-    ctx.fillStyle = '#fff';
+    ctx.fillStyle = '#ff00ff';
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2, false);
     ctx.fill();
 }
 
 function drawText(text, x, y) {
-    ctx.fillStyle = '#fff';
-    ctx.font = '30px Courier New';
+    ctx.fillStyle = '#00ffff';
+    ctx.font = '30px Orbitron';
     ctx.fillText(text, x, y);
 }
 
 function draw() {
     // Clear canvas
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = '#120458';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draw paddles
@@ -80,19 +85,30 @@ function draw() {
 function update() {
     if (isPaused) return;
 
-    // Update paddle positions based on key presses
-    if (wPressed && paddle1Y > 0) {
-        paddle1Y -= paddleSpeed;
+    // Update paddle speeds based on key presses
+    if (wPressed) {
+        paddle1Speed = Math.max(paddle1Speed - paddleAcceleration, -maxPaddleSpeed);
+    } else if (sPressed) {
+        paddle1Speed = Math.min(paddle1Speed + paddleAcceleration, maxPaddleSpeed);
+    } else {
+        paddle1Speed *= paddleDeceleration;
     }
-    if (sPressed && paddle1Y < canvas.height - paddleHeight) {
-        paddle1Y += paddleSpeed;
+
+    if (upPressed) {
+        paddle2Speed = Math.max(paddle2Speed - paddleAcceleration, -maxPaddleSpeed);
+    } else if (downPressed) {
+        paddle2Speed = Math.min(paddle2Speed + paddleAcceleration, maxPaddleSpeed);
+    } else {
+        paddle2Speed *= paddleDeceleration;
     }
-    if (upPressed && paddle2Y > 0) {
-        paddle2Y -= paddleSpeed;
-    }
-    if (downPressed && paddle2Y < canvas.height - paddleHeight) {
-        paddle2Y += paddleSpeed;
-    }
+
+    // Update paddle positions based on speeds
+    paddle1Y += paddle1Speed;
+    paddle2Y += paddle2Speed;
+
+    // Clamp paddle positions to stay within the canvas
+    paddle1Y = Math.max(0, Math.min(canvas.height - paddleHeight, paddle1Y));
+    paddle2Y = Math.max(0, Math.min(canvas.height - paddleHeight, paddle2Y));
 
     ballX += ballSpeedX;
     ballY += ballSpeedY;
